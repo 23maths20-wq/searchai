@@ -1,0 +1,88 @@
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SearchAI</title>
+    <link rel="stylesheet" href="extras.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="auth-body">
+
+    <div class="auth-container">
+        <a href="index.html" class="auth-back">← Back to Home</a>
+        
+        <div class="auth-card">
+            <div class="auth-logo">🚀</div>
+            <h1 class="auth-title">Welcome to SearchAI</h1>
+            <p class="auth-subtitle">Sign in to unlock all features</p>
+            
+            <!-- Tab Switcher -->
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchTab('login', this)">Login</button>
+                <button class="auth-tab" onclick="switchTab('signup', this)">Sign Up</button>
+            </div>
+            
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form active" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>📧 Email</label>
+                    <input type="email" id="loginEmail" required placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label>🔒 Password</label>
+                    <input type="password" id="loginPassword" required placeholder="Enter password">
+                </div>
+                <div class="form-options">
+                    <label class="remember">
+                        <input type="checkbox"> Remember me
+                    </label>
+                    <a href="#" class="forgot">Forgot Password?</a>
+                </div>
+                <button type="submit" class="auth-btn">Login →</button>
+            </form>
+            
+            <!-- Signup Form -->
+            <form id="signupForm" class="auth-form" onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label>👤 Full Name</label>
+                    <input type="text" id="signupName" required placeholder="Your Name">
+                </div>
+                <div class="form-group">
+                    <label>📧 Email</label>
+                    <input type="email" id="signupEmail" required placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label>🔒 Password</label>
+                    <input type="password" id="signupPassword" required placeholder="Create password">
+                </div>
+                <button type="submit" class="auth-btn">Create Account →</button>
+            </form>
+            
+            <!-- Social Login -->
+            <div class="auth-divider">
+                <span>OR</span>
+            </div>
+            
+            <div class="social-login">
+                <button class="social-login-btn google" onclick="socialLogin('google')">
+                    🔍 Continue with Google
+                </button>
+                <button class="social-login-btn facebook" onclick="socialLogin('facebook')">
+                    👤 Continue with Facebook
+                </button>
+            </div>
+            
+            <p class="auth-terms">
+                By continuing, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+</body>
+</html>

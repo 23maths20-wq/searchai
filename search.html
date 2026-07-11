@@ -1,0 +1,183 @@
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SearchAI Results</title>
+    <link rel="stylesheet" href="search.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="results-header">
+        <a href="index.html" class="header-logo">
+            <span style="color:#4285f4">S</span>
+            <span style="color:#ea4335">e</span>
+            <span style="color:#fbbc05">a</span>
+            <span style="color:#4285f4">r</span>
+            <span style="color:#34a853">c</span>
+            <span style="color:#ea4335">h</span>
+            <span class="ai-text">AI</span>
+        </a>
+
+        <div class="header-search">
+            <span class="h-icon">🔍</span>
+            <input type="text" id="resultsInput" placeholder="Search again...">
+            <button onclick="startVoice()">🎤</button>
+            <button onclick="newSearch()" class="h-search-btn">Search</button>
+        </div>
+
+        <div class="header-actions">
+            <button class="h-btn" onclick="toggleDarkMode()">🌙</button>
+        </div>
+    </header>
+
+    <!-- Categories -->
+    <nav class="categories">
+        <button class="cat-btn active" data-tab="ai" onclick="showTab('ai', this)">
+            🤖 AI Answer
+        </button>
+        <button class="cat-btn" data-tab="youtube" onclick="showTab('youtube', this)">
+            📺 Videos
+        </button>
+        <button class="cat-btn" data-tab="images" onclick="showTab('images', this)">
+            🖼️ Images
+        </button>
+        <button class="cat-btn" data-tab="news" onclick="showTab('news', this)">
+            📰 News
+        </button>
+        <button class="cat-btn" data-tab="wiki" onclick="showTab('wiki', this)">
+            📚 Wikipedia
+        </button>
+        <button class="cat-btn" data-tab="maps" onclick="showTab('maps', this)">
+            🗺️ Maps
+        </button>
+        <button class="cat-btn" data-tab="shopping" onclick="showTab('shopping', this)">
+            🛒 Shopping
+        </button>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="results-container">
+
+        <!-- Main Column -->
+        <main class="results-main">
+
+            <!-- Stats -->
+            <div class="stats-bar" id="statsBar">
+                <span class="loading-dots">Searching</span>
+            </div>
+
+            <!-- AI Answer Panel -->
+            <div id="ai-tab" class="tab-panel active">
+                <div class="ai-answer-card" id="aiAnswerBox">
+                    <div class="ai-loading">
+                        <div class="ai-spinner"></div>
+                        <div>
+                            <h3>🤖 AI is thinking...</h3>
+                            <p>Getting the best answer for you</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- YouTube Panel -->
+            <div id="youtube-tab" class="tab-panel">
+                <div class="iframe-container">
+                    <iframe id="youtubeFrame" src="" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <!-- Images Panel -->
+            <div id="images-tab" class="tab-panel">
+                <div class="iframe-container">
+                    <iframe id="imagesFrame" src="" frameborder="0"></iframe>
+                </div>
+            </div>
+
+            <!-- News Panel -->
+            <div id="news-tab" class="tab-panel">
+                <div id="newsResults" class="news-grid"></div>
+            </div>
+
+            <!-- Wiki Panel -->
+            <div id="wiki-tab" class="tab-panel">
+                <div id="wikiResult" class="wiki-card"></div>
+            </div>
+
+            <!-- Maps Panel -->
+            <div id="maps-tab" class="tab-panel">
+                <div class="iframe-container">
+                    <iframe id="mapsFrame" src="" frameborder="0"></iframe>
+                </div>
+            </div>
+
+            <!-- Shopping Panel -->
+            <div id="shopping-tab" class="tab-panel">
+                <div class="iframe-container">
+                    <iframe id="shopFrame" src="" frameborder="0"></iframe>
+                </div>
+            </div>
+
+            <!-- Related Searches -->
+            <section class="related-section">
+                <h3>🔍 Related Searches</h3>
+                <div id="relatedList" class="related-grid"></div>
+            </section>
+
+        </main>
+
+        <!-- Sidebar -->
+        <aside class="results-sidebar">
+
+            <!-- Ad Card 1 -->
+            <div class="ad-card">
+                <span class="ad-label">✨ Sponsored</span>
+                <div class="ad-icon">🚀</div>
+                <h4>Premium AI Tools</h4>
+                <p>Unlock unlimited AI power</p>
+                <button class="ad-btn">Try Free</button>
+            </div>
+
+            <!-- Info Card -->
+            <div class="info-card">
+                <h3>⚡ Quick Info</h3>
+                <div id="factsList"></div>
+            </div>
+
+            <!-- Support Card -->
+            <div class="support-card">
+                <div class="support-icon">☕</div>
+                <h4>Support Developer</h4>
+                <p>Help a 13-year-old build cool stuff!</p>
+                <button class="support-btn">Buy Coffee</button>
+            </div>
+
+            <!-- Share Card -->
+            <div class="share-card">
+                <h3>📤 Share</h3>
+                <div class="share-buttons">
+                    <button onclick="shareOnWhatsApp()" class="share-wa">
+                        💬 WhatsApp
+                    </button>
+                    <button onclick="shareOnTwitter()" class="share-tw">
+                        🐦 Twitter
+                    </button>
+                    <button onclick="copyLink()" class="share-link">
+                        🔗 Copy Link
+                    </button>
+                </div>
+            </div>
+
+        </aside>
+
+    </div>
+
+      <script src="config.js"></script>
+    <script src="search.js"></script>
+</body>
+</html>Select-String -Path *.js -Pattern "gsk_"

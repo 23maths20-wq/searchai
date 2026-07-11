@@ -1,0 +1,118 @@
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chat - SearchAI</title>
+    <link rel="stylesheet" href="chat.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="chat-app">
+
+        <!-- Sidebar -->
+        <aside class="chat-sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <button onclick="newChat()" class="new-chat-btn">
+                    ✨ New Chat
+                </button>
+                <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
+            </div>
+
+            <!-- Personality Selector -->
+            <div class="personality-section">
+                <label>🎭 AI Personality:</label>
+                <select id="personalitySelect" onchange="changePersonality()">
+                    <!-- Filled by JS -->
+                </select>
+            </div>
+
+            <!-- Chat History -->
+            <div class="chat-history">
+                <h3>💬 Chat History</h3>
+                <div id="chatList"></div>
+            </div>
+
+            <!-- Bottom Menu -->
+            <div class="sidebar-bottom">
+                <a href="index.html">🏠 Home</a>
+                <a href="links.html">🔗 Link Mode</a>
+                <a href="premium.html">💎 Premium</a>
+                <a href="dashboard.html">📊 Dashboard</a>
+                <button onclick="toggleDarkMode()">🌙 Theme</button>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-main">
+            
+            <!-- Chat Header -->
+            <header class="chat-header">
+                <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+                <div class="chat-title">
+                    <span id="currentPersonality">🤖 AI Chat</span>
+                </div>
+                <div class="chat-actions">
+                    <button onclick="clearChat()" title="Clear">🗑️</button>
+                    <button onclick="exportChat()" title="Export">📥</button>
+                </div>
+            </header>
+
+            <!-- Messages -->
+            <div class="messages-container" id="messagesContainer">
+                <div class="welcome-screen">
+                    <div class="welcome-icon">🤖</div>
+                    <h1>Hello! I'm your AI Assistant</h1>
+                    <p>Ask me anything or try these:</p>
+                    
+                    <div class="suggestion-cards">
+                        <div class="suggestion-card" onclick="quickAsk('Explain quantum physics simply')">
+                            <div class="s-icon">🧠</div>
+                            <div class="s-text">Explain quantum physics simply</div>
+                        </div>
+                        <div class="suggestion-card" onclick="quickAsk('Write a poem about AI')">
+                            <div class="s-icon">✍️</div>
+                            <div class="s-text">Write a poem about AI</div>
+                        </div>
+                        <div class="suggestion-card" onclick="quickAsk('Help me learn coding')">
+                            <div class="s-icon">💻</div>
+                            <div class="s-text">Help me learn coding</div>
+                        </div>
+                        <div class="suggestion-card" onclick="quickAsk('Give me business ideas')">
+                            <div class="s-icon">💡</div>
+                            <div class="s-text">Give me business ideas</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="chat-input-area">
+                <div class="input-wrapper">
+                    <button class="attach-btn" title="Attach">📎</button>
+                    <textarea 
+                        id="messageInput" 
+                        placeholder="Type your message..."
+                        rows="1"
+                        onkeydown="handleEnter(event)"
+                        oninput="autoResize(this)"
+                    ></textarea>
+                    <button class="voice-btn" onclick="startVoiceChat()" title="Voice">🎤</button>
+                    <button class="send-btn" onclick="sendMessage()" title="Send">
+                        <span>➤</span>
+                    </button>
+                </div>
+                <p class="input-hint">Press Enter to send, Shift+Enter for new line</p>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="chat.js"></script>
+</body>
+</html>

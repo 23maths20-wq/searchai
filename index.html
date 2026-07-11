@@ -1,0 +1,263 @@
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<!DOCTYPE html>
+<html lang="en">
+<script>
+    // 100% Working Back Button Fix
+    (function() {
+        // Method 1: Page show event
+        window.addEventListener('pageshow', function(e) {
+            if (e.persisted) location.reload();
+        });
+        
+        // Method 2: Navigation type check
+        if (window.performance) {
+            if (performance.navigation.type === 2) {
+                location.reload(true);
+            }
+        }
+        
+        // Method 3: Modern API
+        const perfEntries = performance.getEntriesByType("navigation");
+        if (perfEntries[0] && perfEntries[0].type === "back_forward") {
+            location.reload();
+        }
+        
+        // Method 4: Storage event
+        window.addEventListener('popstate', function() {
+            location.reload();
+        });
+        
+        // Method 5: Beforeunload
+        window.addEventListener('beforeunload', function() {
+            // Clear cache markers
+            sessionStorage.setItem('lastVisit', Date.now());
+        });
+        
+        // Method 6: Check on load
+        window.addEventListener('load', function() {
+            const lastVisit = sessionStorage.getItem('lastVisit');
+            if (lastVisit && (Date.now() - lastVisit < 5000)) {
+                // Recent visit, force reload
+                sessionStorage.removeItem('lastVisit');
+                location.reload();
+            }
+        });
+    })();
+</script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SearchAI - Smart AI Search Engine</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+    <meta name="theme-color" content="#4285f4">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <a href="#" class="nav-link">🏠 Home</a>
+            <a href="#" class="nav-link">ℹ️ About</a>
+        </div>
+        <div class="nav-right">
+            <span id="incognitoTag" class="incognito-tag hidden">🕵️ Incognito ON</span>
+            <button class="nav-btn" onclick="toggleDarkMode()" title="Dark Mode">
+                <span id="darkIcon">🌙</span>
+            </button>
+            <button class="nav-btn" onclick="toggleIncognito()" title="Incognito">
+                <span id="incognitoIcon">🕵️</span>
+            </button>
+            <a href="login.html" class="signin-btn" style="text-decoration:none;">Sign In</a>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="main-container">
+        
+        <!-- Logo -->
+        <div class="logo-wrap">
+            <div class="logo-icon">🚀</div>
+            <h1 class="logo">
+                <span class="letter" style="--i:1;color:#4285f4">S</span>
+                <span class="letter" style="--i:2;color:#ea4335">e</span>
+                <span class="letter" style="--i:3;color:#fbbc05">a</span>
+                <span class="letter" style="--i:4;color:#4285f4">r</span>
+                <span class="letter" style="--i:5;color:#34a853">c</span>
+                <span class="letter" style="--i:6;color:#ea4335">h</span>
+                <span class="letter ai" style="--i:7">AI</span>
+            </h1>
+            <p class="tagline">✨ Ask anything, get instant answers ✨</p>
+        </div>
+
+        <!-- Search Container -->
+        <div class="search-wrap">
+            <div class="search-box" id="searchBox">
+                <span class="search-icon-left">🔍</span>
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="Ask me anything..."
+                    autocomplete="off"
+                    onkeyup="handleKeyUp(event)"
+                    oninput="showSuggestions()"
+                >
+                <div class="search-actions">
+                    <button onclick="clearSearch()" id="clearBtn" class="action-btn hidden" title="Clear">✕</button>
+                    <div class="divider"></div>
+                    <button onclick="startVoice()" id="voiceBtn" class="action-btn voice" title="Voice">🎤</button>
+                    <button onclick="startCamera()" class="action-btn" title="Camera">📷</button>
+                </div>
+            </div>
+            <div class="suggestions" id="suggestions"></div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button onclick="doSearch()" class="btn btn-primary">
+                <span>🔍</span> AI Search
+            </button>
+            <button onclick="feelingLucky()" class="btn btn-secondary">
+                <span>⚡</span> Quick Answer
+            </button>
+        </div>
+
+        <!-- NEW FEATURES SECTION -->
+        <div class="quick-links">
+            <p class="quick-title">✨ New Features:</p>
+            <div class="quick-grid">
+                <a href="chat.html" class="quick-btn" style="text-decoration: none; color: inherit;">
+                    <span class="q-icon">💬</span>
+                    <span class="q-label">AI Chat</span>
+                </a>
+                <a href="links.html" class="quick-btn" style="text-decoration: none; color: inherit;">
+                    <span class="q-icon">🔗</span>
+                    <span class="q-label">Link Mode</span>
+                </a>
+                <a href="login.html" class="quick-btn" style="text-decoration: none; color: inherit;">
+                    <span class="q-icon">🔐</span>
+                    <span class="q-label">Login</span>
+                </a>
+                <a href="premium.html" class="quick-btn" style="text-decoration: none; color: inherit;">
+                    <span class="q-icon">💎</span>
+                    <span class="q-label">Premium</span>
+                </a>
+                <a href="dashboard.html" class="quick-btn" style="text-decoration: none; color: inherit;">
+                    <span class="q-icon">📊</span>
+                    <span class="q-label">Dashboard</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- SEARCH ON WEBSITES -->
+        <div class="quick-links" style="margin-top: 30px;">
+            <p class="quick-title">🎯 Search on:</p>
+            <div class="quick-grid">
+                <button class="quick-btn" onclick="searchOn('youtube')">
+                    <span class="q-icon">📺</span>
+                    <span class="q-label">YouTube</span>
+                </button>
+                <button class="quick-btn" onclick="searchOn('images')">
+                    <span class="q-icon">🖼️</span>
+                    <span class="q-label">Images</span>
+                </button>
+                <button class="quick-btn" onclick="searchOn('news')">
+                    <span class="q-icon">📰</span>
+                    <span class="q-label">News</span>
+                </button>
+                <button class="quick-btn" onclick="searchOn('maps')">
+                    <span class="q-icon">🗺️</span>
+                    <span class="q-label">Maps</span>
+                </button>
+                <button class="quick-btn" onclick="searchOn('wikipedia')">
+                    <span class="q-icon">📚</span>
+                    <span class="q-label">Wiki</span>
+                </button>
+                <button class="quick-btn" onclick="searchOn('reddit')">
+                    <span class="q-icon">👾</span>
+                    <span class="q-label">Reddit</span>
+                </button>
+                <button class="quick-btn" onclick="searchOn('twitter')">
+                    <span class="q-icon">🐦</span>
+                    <span class="q-label">Twitter</span>
+                </button>
+                <button class="quick-btn" onclick="searchOn('amazon')">
+                    <span class="q-icon">🛒</span>
+                    <span class="q-label">Shop</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Recent Searches -->
+        <div id="recentSearches" class="recent-wrap">
+            <h3 class="recent-title">🕐 Recent Searches</h3>
+            <div id="historyList" class="history-list"></div>
+            <button onclick="clearHistory()" class="clear-btn">🗑️ Clear All</button>
+        </div>
+
+        <!-- Features -->
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Super Fast</h3>
+                <p>Powered by Groq AI</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Private</h3>
+                <p>Use incognito mode</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Accurate</h3>
+                <p>Direct AI answers</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>Install App</h3>
+                <p>Works offline</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-left">
+            <span>🌍 Pakistan</span>
+        </div>
+        <div class="footer-links">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">About</a>
+            <a href="#" onclick="shareApp()">📤 Share</a>
+        </div>
+        <div class="footer-right">
+            <span>Made with ❤️ by 13yr old</span>
+        </div>
+    </footer>
+
+    <!-- Install PWA Prompt -->
+    <div id="installPrompt" class="install-prompt hidden">
+        <div class="install-icon">📲</div>
+        <div class="install-text">
+            <strong>Install SearchAI</strong>
+            <p>Quick access from home screen</p>
+        </div>
+        <button id="installBtn" class="install-yes">Install</button>
+        <button onclick="hideInstall()" class="install-no">✕</button>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Mode - SearchAI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="extras.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <!-- Top Nav -->
+    <nav class="top-nav">
+        <a href="index.html" class="nav-back">← Back to Home</a>
+        <div class="nav-right">
+            <button class="nav-btn" onclick="toggleDarkMode()">🌙</button>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="links-header">
+        <h1 class="links-title">🔗 Link Mode</h1>
+        <p class="links-subtitle">Access 100+ popular websites in one place</p>
+        
+        <div class="links-search">
+            <input type="text" id="linkSearch" placeholder="🔍 Search any website..." oninput="filterLinks()">
+        </div>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="category-filter" id="categoryFilter"></div>
+
+    <!-- Links Grid -->
+    <div class="links-container" id="linksContainer"></div>
+
+    <!-- Made By You -->
+    <div class="creator-card">
+        <div class="creator-icon">👨‍💻</div>
+        <h3>Made by a 13-year-old Genius</h3>
+        <p>Follow me on social media!</p>
+        <div class="creator-socials" id="creatorSocials"></div>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        // ============ INITIALIZE ============
+        let currentCategory = 'all';
+        let allLinks = [];
+
+        window.onload = () => {
+            loadTheme();
+            renderCategories();
+            renderAllLinks();
+            renderCreatorSocials();
+        };
+
+        // ============ CATEGORIES ============
+        function renderCategories() {
+            const container = document.getElementById('categoryFilter');
+            
+            let html = `<button class="cat-filter-btn active" onclick="filterCategory('all', this)">
+                🌐 All Websites
+            </button>`;
+            
+            Object.keys(LINK_CATEGORIES).forEach(key => {
+                const cat = LINK_CATEGORIES[key];
+                html += `
+                    <button class="cat-filter-btn" onclick="filterCategory('${key}', this)">
+                        ${cat.icon} ${cat.name}
+                    </button>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function filterCategory(category, btn) {
+            currentCategory = category;
+            document.querySelectorAll('.cat-filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderAllLinks();
+        }
+
+        // ============ RENDER LINKS ============
+        function renderAllLinks() {
+            const container = document.getElementById('linksContainer');
+            let html = '';
+
+            if (currentCategory === 'all') {
+                // Show all categories
+                Object.keys(LINK_CATEGORIES).forEach(key => {
+                    const cat = LINK_CATEGORIES[key];
+                    html += `
+                        <div class="category-section">
+                            <h2 class="category-title">${cat.icon} ${cat.name}</h2>
+                            <div class="links-grid">
+                                ${renderLinksCards(cat.links)}
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                // Show specific category
+                const cat = LINK_CATEGORIES[currentCategory];
+                html = `
+                    <div class="category-section">
+                        <h2 class="category-title">${cat.icon} ${cat.name}</h2>
+                        <div class="links-grid">
+                            ${renderLinksCards(cat.links)}
+                        </div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+
+        function renderLinksCards(links) {
+            return links.map(link => `
+                <a href="${link.url}" target="_blank" class="link-card" style="--card-color: ${link.color}">
+                    <div class="link-icon">${link.icon}</div>
+                    <div class="link-name">${link.name}</div>
+                    <div class="link-arrow">→</div>
+                </a>
+            `).join('');
+        }
+
+        // ============ SEARCH FILTER ============
+        function filterLinks() {
+            const query = document.getElementById('linkSearch').value.toLowerCase();
+            const container = document.getElementById('linksContainer');
+            
+            if (!query) {
+                renderAllLinks();
+                return;
+            }
+
+            let allMatches = [];
+            Object.keys(LINK_CATEGORIES).forEach(key => {
+                const cat = LINK_CATEGORIES[key];
+                const matches = cat.links.filter(link => 
+                    link.name.toLowerCase().includes(query)
+                );
+                allMatches = [...allMatches, ...matches];
+            });
+
+            if (allMatches.length === 0) {
+                container.innerHTML = `
+                    <div class="no-results">
+                        <div style="font-size: 60px;">🔍</div>
+                        <h3>No websites found</h3>
+                        <p>Try searching for something else</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="category-section">
+                    <h2 class="category-title">🔍 Search Results (${allMatches.length})</h2>
+                    <div class="links-grid">
+                        ${renderLinksCards(allMatches)}
+                    </div>
+                </div>
+            `;
+        }
+
+        // ============ CREATOR SOCIALS ============
+        function renderCreatorSocials() {
+            const container = document.getElementById('creatorSocials');
+            const socials = [
+                {url: CONFIG.SOCIAL.youtube, icon: '📺', name: 'YouTube', color: '#ff0000'},
+                {url: CONFIG.SOCIAL.instagram, icon: '📷', name: 'Instagram', color: '#e4405f'},
+                {url: CONFIG.SOCIAL.twitter, icon: '🐦', name: 'Twitter', color: '#000'},
+                {url: CONFIG.SOCIAL.facebook, icon: '👤', name: 'Facebook', color: '#1877f2'},
+                {url: CONFIG.SOCIAL.whatsapp, icon: '💬', name: 'WhatsApp', color: '#25d366'},
+                {url: CONFIG.SOCIAL.telegram, icon: '✈️', name: 'Telegram', color: '#0088cc'}
+            ];
+
+            container.innerHTML = socials.map(s => `
+                <a href="${s.url}" target="_blank" class="social-btn" style="--btn-color: ${s.color}">
+                    ${s.icon} ${s.name}
+                </a>
+            `).join('');
+        }
+
+        // ============ DARK MODE ============
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark');
+            localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+        }
+
+        function loadTheme() {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark');
+            }
+        }
+    </script>
+</body>
+</html>

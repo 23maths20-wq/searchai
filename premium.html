@@ -1,0 +1,129 @@
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium - SearchAI</title>
+    <link rel="stylesheet" href="extras.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="premium-body">
+
+    <nav class="top-nav">
+        <a href="index.html" class="nav-back">← Back</a>
+    </nav>
+
+    <div class="premium-hero">
+        <div class="premium-badge">✨ PREMIUM</div>
+        <h1>Unlock the Full Power of AI</h1>
+        <p>Choose the perfect plan for you</p>
+    </div>
+
+    <div class="pricing-container">
+        
+        <!-- Free Plan -->
+        <div class="pricing-card">
+            <div class="plan-icon">🆓</div>
+            <h2>Free</h2>
+            <div class="price">
+                <span class="currency">₹</span>
+                <span class="amount">0</span>
+                <span class="period">/forever</span>
+            </div>
+            <ul class="features-list">
+                <li>✅ 20 AI searches/day</li>
+                <li>✅ Basic AI model</li>
+                <li>✅ Search history</li>
+                <li>✅ Voice search</li>
+                <li>❌ Ads shown</li>
+                <li>❌ No premium features</li>
+            </ul>
+            <button class="plan-btn free-btn">Current Plan</button>
+        </div>
+        
+        <!-- Pro Plan (Popular) -->
+        <div class="pricing-card popular">
+            <div class="popular-badge">🔥 MOST POPULAR</div>
+            <div class="plan-icon">💎</div>
+            <h2>Pro</h2>
+            <div class="price">
+                <span class="currency">₹</span>
+                <span class="amount">399</span>
+                <span class="period">/month</span>
+            </div>
+            <ul class="features-list">
+                <li>✅ Unlimited AI searches</li>
+                <li>✅ Advanced AI models</li>
+                <li>✅ No ads</li>
+                <li>✅ Voice assistant</li>
+                <li>✅ Save & bookmark</li>
+                <li>✅ Priority support</li>
+                <li>✅ Export chats</li>
+                <li>✅ 5 personality modes</li>
+            </ul>
+            <button class="plan-btn pro-btn" onclick="upgrade('pro')">Upgrade to Pro 🚀</button>
+        </div>
+        
+        <!-- Business Plan -->
+        <div class="pricing-card">
+            <div class="plan-icon">🏢</div>
+            <h2>Business</h2>
+            <div class="price">
+                <span class="currency">₹</span>
+                <span class="amount">1499</span>
+                <span class="period">/month</span>
+            </div>
+            <ul class="features-list">
+                <li>✅ Everything in Pro</li>
+                <li>✅ Team accounts (10)</li>
+                <li>✅ API access</li>
+                <li>✅ Custom branding</li>
+                <li>✅ Analytics dashboard</li>
+                <li>✅ 24/7 support</li>
+                <li>✅ Priority features</li>
+                <li>✅ Custom AI training</li>
+            </ul>
+            <button class="plan-btn business-btn" onclick="upgrade('business')">Contact Sales</button>
+        </div>
+        
+    </div>
+
+    <!-- Payment Options -->
+    <div class="payment-section">
+        <h2>💳 Payment Methods</h2>
+        <div class="payment-icons">
+            <div class="pay-icon">💳 Card</div>
+            <div class="pay-icon">📱 UPI</div>
+            <div class="pay-icon">💰 PayPal</div>
+            <div class="pay-icon">🏦 Net Banking</div>
+        </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="faq-section">
+        <h2>❓ Frequently Asked Questions</h2>
+        <div class="faq-item">
+            <h3>Can I cancel anytime?</h3>
+            <p>Yes! Cancel your subscription anytime with no fees.</p>
+        </div>
+        <div class="faq-item">
+            <h3>Is there a free trial?</h3>
+            <p>Yes! Try Pro free for 7 days, no credit card needed.</p>
+        </div>
+        <div class="faq-item">
+            <h3>What payment methods do you accept?</h3>
+            <p>Card, UPI, PayPal, Net Banking - all major options.</p>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        function upgrade(plan) {
+            alert(`🎉 Upgrade to ${plan}! Payment integration coming soon.\n\nFor now, contact: ${CONFIG.SOCIAL.email}`);
+        }
+    </script>
+</body>
+</html>
