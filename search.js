@@ -5,8 +5,7 @@ window.addEventListener('pageshow', function(event) {
     }
 });
 // ============ CONFIG ============
-const GROQ_API_KEY = CONFIG.APIs.groq.key;
-
+// API key is now handled securely by backend (/api/chat)
 // ============ GET QUERY ============
 const params = new URLSearchParams(window.location.search);
 const query = params.get('q') || '';
@@ -38,30 +37,31 @@ function updateStats() {
     }, 1000);
 }
 
-// ============ AI ANSWER ============
+
+// ============ AI ANSWER (Using Secure Backend) ============
 async function getAIAnswer() {
     try {
-        const response = await fetch(
-            'https://api.groq.com/openai/v1/chat/completions',
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${GROQ_API_KEY}`
-                },
-                body: JSON.stringify({
-                    model: 'llama-3.3-70b-versatile',
-                    messages: [{
-                        role: 'system',
-                        content: 'You are a helpful AI search assistant. Give clear, informative, well-formatted answers. Use markdown formatting when needed.'
-                    }, {
-                        role: 'user',
-                        content: query
-                    }],
-                    max_tokens: 1500
-                })
-            }
-        );
+        // Try Groq backend first
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                model: 'llama-3.3-70b-versatile',
+                messages: [{
+                    role: 'system',
+                    content: 'You are a helpful AI search assistant. Give clear, informative, well-formatted answers. Use markdown formatting when needed.'
+                }, {
+                    role: 'user',
+                    content: query
+                }]
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error('Groq backend failed');
+        }
         
         const data = await response.json();
         
@@ -72,20 +72,55 @@ async function getAIAnswer() {
         }
         
     } catch (error) {
-        console.error(error);
-        document.getElementById('aiAnswerBox').innerHTML = `
-            <div class="ai-answer-content">
-                <h2>❌ Oops!</h2>
-                <p>Could not get AI answer. Please check:</p>
-                <ul>
-                    <li>Your Groq API key is correct</li>
-                    <li>You have internet connection</li>
-                    <li>The API is not down</li>
-                </ul>
-                <br>
-                <p>Get free API key from: <strong>console.groq.com</strong></p>
-            </div>
-        `;
+        console.log('Groq failed, trying OpenRouter backup...');
+        
+        // Try OpenRouter backend as backup
+        try {
+            const response = await fetch('/api/openrouter', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: 'mistralai/mistral-7b-instruct:free',
+                    messages: [{
+                        role: 'system',
+                        content: 'You are a helpful AI search assistant. Give clear, informative, well-formatted answers. Use markdown formatting when needed.'
+                    }, {
+                        role: 'user',
+                        content: query
+                    }]
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error('OpenRouter backend failed');
+            }
+            
+            const data = await response.json();
+            
+            if (data.choices?.[0]?.message?.content) {
+                displayAnswer(data.choices[0].message.content);
+            } else {
+                throw new Error('No answer from backup');
+            }
+            
+        } catch (e) {
+            console.error('All APIs failed:', e);
+            document.getElementById('aiAnswerBox').innerHTML = `
+                <div class="ai-answer-content">
+                    <h2>❌ Oops!</h2>
+                    <p>Could not get AI answer. Please check:</p>
+                    <ul>
+                        <li>Your internet connection is working</li>
+                        <li>The API service is not down</li>
+                        <li>Try again in a moment</li>
+                    </ul>
+                    <br>
+                    <button class="ai-btn" onclick="regenerate()">🔄 Try Again</button>
+                </div>
+            `;
+        }
     }
 }
 

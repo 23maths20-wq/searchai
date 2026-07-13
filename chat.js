@@ -127,53 +127,66 @@ function addMessage(role, content) {
     container.scrollTop = container.scrollHeight;
 }
 
-// ============ AI CALL ============
+// ============ AI CALL (Using Secure Backend) ============
 async function callAI(query) {
     const personality = PERSONALITIES[currentPersonality];
     const systemPrompt = personality.prompt;
     
-    // Try Groq first
+    // Prepare messages with system prompt
+    const messagesToSend = [
+        {role: 'system', content: systemPrompt},
+        ...messages.slice(-10) // Last 10 messages for context
+    ];
+    
+    // Try Groq backend first
     try {
-        const response = await fetch(CONFIG.APIs.groq.url, {
+        const response = await fetch('/api/chat', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${CONFIG.APIs.groq.key}`
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                model: CONFIG.APIs.groq.model,
-                messages: [
-                    {role: 'system', content: systemPrompt},
-                    ...messages.slice(-10) // Last 10 messages for context
-                ],
-                max_tokens: 1500
+                messages: messagesToSend,
+                model: 'llama-3.3-70b-versatile'
             })
         });
+        
+        if (!response.ok) {
+            throw new Error('Groq failed');
+        }
         
         const data = await response.json();
         return data.choices[0].message.content;
         
     } catch (error) {
-        // Try Gemini as backup
+        console.log('Groq failed, trying OpenRouter backup...');
+        
+        // Try OpenRouter backend as backup
         try {
-            const response = await fetch(
-                `${CONFIG.APIs.gemini.url}?key=${CONFIG.APIs.gemini.key}`,
-                {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        contents: [{parts: [{text: systemPrompt + '\n\n' + query}]}]
-                    })
-                }
-            );
+            const response = await fetch('/api/openrouter', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    messages: messagesToSend,
+                    model: 'mistralai/mistral-7b-instruct:free'
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error('OpenRouter failed');
+            }
+            
             const data = await response.json();
-            return data.candidates[0].content.parts[0].text;
+            return data.choices[0].message.content;
+            
         } catch (e) {
+            console.error('All APIs failed:', e);
             throw new Error('All APIs failed');
         }
     }
 }
-
 // ============ TYPING INDICATOR ============
 function showTyping() {
     const container = document.getElementById('messagesContainer');

@@ -9,8 +9,8 @@ window.addEventListener('pageshow', function(event) {
 if (performance.navigation.type === 2) {
     location.reload(true);
 }
-// ============ CONFIG - APNI KEY YAHAN PASTE KARO ============
-const GROQ_API_KEY = CONFIG.APIs.groq.key;
+// ============ CONFIG ============
+// API key is now handled securely by backend (/api/chat)
 
 // ============ STATE ============
 let isDarkMode = false;
